@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Buscar_Aula.Models.Aula>
+
+@{
+    ViewBag.Title = "Buscar Aula";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        padding-top: 20px; 
+        background-size: cover; 
+        background-position: center; 
+    }
+    .content-wrapper {
+        background-color: rgba(255, 255, 255, 0.8); 
+        padding: 20px;
+        border-radius: 10px; 
+        margin-top: 20px; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    }
+    h2 {
+        color: #007bff; 
+        margin-bottom: 20px; 
+    }
+    .form-group {
+        margin-bottom: 20px; 
+    }
+    .btn-primary {
+        background-color: #007bff; 
+        border-color: #007bff; 
+    }
+        .btn-primary:hover {
+            background-color: #0056b3; 
+            border-color: #0056b3;
+        }
+    .table {
+        background-color: #fff;
+    }
+        .table th,
+        .table td {
+            border-color: #dee2e6; 
+        }
+    .alert {
+        margin-top: 20px; 
+    }
+    .text-muted {
+        color: #6c757d;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 content-wrapper">
+            <h2>Buscar Aula</h2>
+            @using (Html.BeginForm("AulaBuscar", "Aula", FormMethod.Get))
+            {
+                <div class="form-group">
+                    <label for="codAula">Código del Aula:</label>
+                    <div class="input-group">
+                        <input type="text" name="codAula" class="form-control" id="codAula" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr />
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Html.Raw(ViewBag.ErrorMessage)</div>
+            }
+            else
+            {
+                if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Tipo de Aula</th>
+                                    <th>Hora de Inicio</th>
+                                    <th>Hora de Fin</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var aula in Model)
+                                {
+                                    <tr>
+                                        <td>@aula.cod_aula</td>
+                                        <td>@aula.tipo_aula</td>
+                                        <td>@aula.hora_inicio</td>
+                                        <td>@aula.hora_fin</td>
+                                        <td>@aula.estado</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else if (Request.HttpMethod == "GET" && string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <p class="text-muted">Ingrese un código de aula y presione buscar para ver los resultados.</p>
+                }
+                else if (Model != null && !Model.Any())
+                {
+                    <p class="text-muted">No se encontraron aulas que coincidan con los criterios de búsqueda.</p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
